@@ -1,0 +1,57 @@
+# =============================================================================
+# UCF - Spartan-3A/3AN FPGA Starter Kit
+# Project: One-Time Pad Crypto Engine
+# Description: Pin assignments and I/O standard configurations for the FPGA.
+#              Maps the VHDL top-level entity ports to physical board pins.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# System Clock and Reset
+# -----------------------------------------------------------------------------
+# Main system oscillator (typically 50 MHz on the Spartan-3A Starter Kit)
+NET "sys_clk"       LOC = "E12" | IOSTANDARD = LVCMOS33;
+
+# Main synchronous system reset (active high, usually tied to a push-button)
+NET "sys_rst"       LOC = "T15" | IOSTANDARD = LVCMOS33; 
+
+# -----------------------------------------------------------------------------
+# Operation Mode Toggle Switch
+# -----------------------------------------------------------------------------
+# Slide switch used to select between Encryption ('0') and Decryption ('1') modes
+NET "op_mode_sw"    LOC = "V8"  | IOSTANDARD = LVCMOS33;
+
+# -----------------------------------------------------------------------------
+# PS/2 Keyboard Interface
+# -----------------------------------------------------------------------------
+# PS/2 is an open-collector bus. The PULLUP constraint activates internal 
+# FPGA pull-up resistors, which are strictly required for reliable communication
+# so the lines don't float when neither device is driving them low.
+NET "kb_dat_pin"    LOC = "V11" | IOSTANDARD = LVCMOS33 | PULLUP;
+NET "kb_clk_pin"    LOC = "W12" | IOSTANDARD = LVCMOS33 | PULLUP;
+
+# -----------------------------------------------------------------------------
+# Operation Status LEDs
+# -----------------------------------------------------------------------------
+# Visual indicators for the current Finite State Machine (FSM) phase.
+# SLEW = SLOW and DRIVE = 8mA are used to limit electrical noise and EMI.
+NET "status_leds<0>" LOC = "R20" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+NET "status_leds<1>" LOC = "T19" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+NET "status_leds<2>" LOC = "U20" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 8;
+
+# -----------------------------------------------------------------------------
+# LCD Display Wiring (4-Bit Mode Configuration)
+# -----------------------------------------------------------------------------
+# Standard character LCD (e.g., HD44780 compatible) operating in 4-bit mode.
+# Only the upper 4 bits of the data bus (D4 to D7) are physically connected to save pins.
+# SLEW = SLOW and DRIVE = 4mA minimize signal ringing and reflections on the traces.
+
+# Control Signals
+NET "lcd_en_pulse"  LOC = "AB4"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+NET "lcd_rs_pin"    LOC = "Y14"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+NET "lcd_rw_pin"    LOC = "W13"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+
+# 4-bit Data Bus
+NET "lcd_data_bus<7>" LOC = "Y15"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+NET "lcd_data_bus<6>" LOC = "AB16" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+NET "lcd_data_bus<5>" LOC = "Y16"  | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
+NET "lcd_data_bus<4>" LOC = "AA12" | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 4;
